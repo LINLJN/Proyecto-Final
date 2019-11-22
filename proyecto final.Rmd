@@ -1,10 +1,7 @@
 ---
-title: "Proyecto final"
+title: "Población en España "
 author: "Lijun Lin"
-<<<<<<< HEAD
-=======
-github: {user: LINLJN, repo: Proyecto-Final, branch: "gh-pages"}
->>>>>>> ed316769aaf56f744316b907822bfbd64c8b595e
+github: {user: LINLJN, repo: Proyecto-Final, branch: "master"}
 date: "20/11/2019"
 output: 
   rmarkdown::html_document:
@@ -30,14 +27,51 @@ summary(cars)
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-<<<<<<< HEAD
-PIB <- read.csv('dat/PIB/variacion_anual_del_pib_d.csv',sep = ";",header = T,encoding = 'UTF-8')
-FMI <- PIB[-c(37:39),] 
-plot(FMI)
-=======
-plot(pressure)
->>>>>>> ed316769aaf56f744316b907822bfbd64c8b595e
+```{r p, echo=FALSE}
+#install.packages("gifski")
+
+```
+
+```{r p.total, echo=FALSE}
+library(tidyverse)
+library(gganimate)
+library(gapminder)
+theme_set(theme_classic())
+
+gap <- gapminder %>%
+  filter(continent == "Asia") %>%
+  group_by(year) %>%
+  # The * 1 makes it possible to have non-integer ranks while sliding
+  mutate(rank = min_rank(-gdpPercap) * 1) %>%
+  ungroup()
+
+p <- ggplot(gap, aes(rank, group = country, 
+                     fill = as.factor(country), color = as.factor(country))) +
+  geom_tile(aes(y = gdpPercap/2,
+                height = gdpPercap,
+                width = 0.9), alpha = 0.8, color = NA) +
+  
+  # text in x-axis (requires clip = "off" in coord_*)
+  # paste(country, " ")  is a hack to make pretty spacing, since hjust > 1 
+  #   leads to weird artifacts in text spacing.
+  geom_text(aes(y = 0, label = paste(country, " ")), vjust = 0.2, hjust = 1) +
+  
+  coord_flip(clip = "off", expand = FALSE) +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_reverse() +
+  guides(color = FALSE, fill = FALSE) +
+  
+  labs(title='{closest_state}', x = "", y = "GFP per capita") +
+  theme(plot.title = element_text(hjust = 0, size = 22),
+        axis.ticks.y = element_blank(),  # These relate to the axes post-flip
+        axis.text.y  = element_blank(),  # These relate to the axes post-flip
+        plot.margin = margin(1,1,1,4, "cm")) +
+  
+  transition_states(year, transition_length = 4, state_length = 1) +
+  ease_aes('cubic-in-out')
+
+animate(p, fps = 25, duration = 20, width = 800, height = 600)
+
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
