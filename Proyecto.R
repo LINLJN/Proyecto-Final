@@ -1,17 +1,17 @@
 
-#Lectura de datos PIB 'variacion anual del PIB de España y previsiones de crecimiento hechas por el FMI'
+#Lectura de datos PIB 'variacion anual del PIB de Espa?a y previsiones de crecimiento hechas por el FMI'
 PIB <- read.csv('dat/PIB/variacion_anual_del_pib_d.csv',sep = ";",header = T,encoding = 'UTF-8')
-PIB$Variación.anual.del.PIB <- as.numeric(gsub(',','.',PIB$Variación.anual.del.PIB))
+PIB$Variaci?n.anual.del.PIB <- as.numeric(gsub(',','.',PIB$Variaci?n.anual.del.PIB))
 
-#Las previsiones sobre el PIB español de la OCDE
+#Las previsiones sobre el PIB espa?ol de la OCDE
 
 pib <-  read.csv('dat/PIB/las_previsiones_sobre_el_PIB.csv',sep = ";",header = T,encoding = 'UTF-8')
-pib$Variación.interanual.del.PIB <- as.numeric(gsub(',','.',pib$Variación.interanual.del.PIB))
+pib$Variaci?n.interanual.del.PIB <- as.numeric(gsub(',','.',pib$Variaci?n.interanual.del.PIB))
 
 #Lectura de datos de poblacion de Espana Generico
 
 poblacion <-  read.csv('dat/Poblacion/evolucion_de_la_poblacion.csv',sep = ";",header = T,encoding = 'UTF-8')
-poblacion$Evolución.de.la.población.residente.en.España <-as.numeric(gsub(',','.',poblacion$Evolución.de.la.población.residente.en.España))
+poblacion$Evoluci?n.de.la.poblaci?n.residente.en.Espa?a <-as.numeric(gsub(',','.',poblacion$Evoluci?n.de.la.poblaci?n.residente.en.Espa?a))
 
 #--------------------------------------
 p.poblacion <- read.csv('dat/Poblacion/prevision_poblacion.csv',sep = ";",header = T,encoding = 'UTF-8')
@@ -47,21 +47,6 @@ p.total <- p.total[-c(1,20:24),]
 library(reshape2)
 p.total <- melt(p.total,"X")
 p.total$variable <- gsub('X','',p.total$variable)
-
-library(ggplot2)
-library(gganimate)
-theme_set(theme_bw())
-
-p <- ggplot(
-  p.total, 
-  aes(x = variable, y=value, size = pop, colour = X)
-) +
-  geom_point(show.legend = FALSE, alpha = 0.7) +
-  scale_color_viridis_d() +
-  scale_size(range = c(1, 5)) +
-  labs(x = "Year", y = "n.habitantes")
-
-p
 
 
 p.hombres <-  autonoma[,c(25:47)]
