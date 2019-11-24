@@ -1,0 +1,130 @@
+---
+title: "Población en España "
+author: "Lijun Lin"
+github: {user: LINLJN, repo: Proyecto-Final, branch: "master"}
+date: "20/11/2019"
+output: 
+  html_document:
+    toc: true
+    toc_depth: 5            
+    toc_float: 
+      collapsed: false        
+      smooth_scroll: true
+
+  # Encabezado 1
+  ##  Exprexiones regulares
+   ### ¿Que son las expresiones regulares?
+
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE
+)
+```
+# Encabezado 1
+## Exprexiones regulares
+### ¿Que son las expresiones regulares?
+
+Expresión regular, también conocida como regex, regexp o expresión racional, es una secuencia de caracteres que forma un patrón de búsqueda, principalmente utilizada para la búsqueda de patrones de cadenas de caracteres u operaciones de sustituciones.
+
+Las expresiones regulares se construyen utilizando los operadores unión, concatenación y clausura de Kleene.
+
+La clausura de Kleene : es una operación que se aplica sobre un conjunto de cadenas de caracteres o un conjunto de símbolos o caracteres, y representa el conjunto de las cadenas que se pueden formar tomando cualquier número de cadenas del conjunto inicial, posiblemente con repeticiones, y concatenándolas entre sí.
+
+
+
+
+
+## Markdown
+
+
+
+```{r cars, echo=FALSE}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+
+```{r poblacion grafica race, echo=F, message=FALSE, warning=FALSE, gganimate=list(nframes = 300, fps = 60)}
+#install.packages("gifski") es necesario instalar este paquete para ejecutar la animacion
+library(reshape2)
+library(tidyverse)
+library(lubridate)
+library(gganimate)
+
+autonoma <-  read.csv("dat/Poblacion/2853sc.csv",sep = ";",skip = 5)
+
+  mil <- function(x){
+    x<-as.numeric(gsub("\\.","",x))
+  }
+  
+autonoma[,2:70] <- lapply(autonoma[,2:70],mil)
+
+p.total <- autonoma[,c(1:24)]
+p.total <- p.total[-c(1,20:24),]
+
+
+p.total <- melt(p.total,"X")
+p.total$variable <- gsub("X","",p.total$variable)
+names (p.total)
+names(p.total) = c("Provincia","year","poblacion")
+p.total <- na.omit(p.total)
+
+p.total %>%
+  select(Provincia,poblacion,year) %>%
+  group_by(year) %>%
+  arrange(year,-poblacion) %>%
+  mutate(rank = 1:n()) %>%
+  filter(rank <= 19) ->
+ranked_by_year1  
+
+ranked_by_year1$year <- as.integer(ranked_by_year1$year)
+ranked_by_year1$poblacion <- as.integer(ranked_by_year1$poblacion)
+
+my_theme <- ggplot(data = ranked_by_year1) +
+  aes(group = Provincia, fill = Provincia) +
+  aes(xmin = 0 ,
+      xmax = poblacion/2000) +
+  aes(ymin = rank - 0.45,
+      ymax = rank + 0.45) +
+  scale_y_reverse(
+    breaks = c(0),
+    labels = c(0)) +
+  scale_x_continuous(
+    limits = c(-1500, 4500),
+    breaks = c(0),
+    labels = c(0)) +
+  scale_fill_viridis_d(option = "viridis",direction = -1) +
+  geom_rect(alpha = 0.7) +
+  aes(label = Provincia, y = rank) +
+  geom_text(col = "gray13",
+            hjust = "right",
+            x = -30) +
+  geom_text(aes(y = rank , label = as.character(poblacion)),
+            vjust = 0.4, 
+            hjust = "right" ,
+            x = 4800) +
+  geom_text(x = 3000 , y = -15,
+            family = "Times",
+            aes(label = as.character(year)),
+            size = 15, col = "grey18") +
+  labs(fill = "") +
+  labs(title = "Tasa de crecimiento demográfico (España/Comunidades)") +
+  labs(x = "Población",y = "Provincia") +
+  theme(axis.title = element_text(size = 10,face ="bold")) +
+  theme(plot.title = element_text(size=13,face = "bold")) 
+
+my_plot <- my_theme
+
+options(gganimate.dev_args = list(width = 800, height = 800))
+my_plot + gganimate::transition_states(year)
+
+```
+
+
+
+

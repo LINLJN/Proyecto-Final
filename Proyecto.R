@@ -43,68 +43,86 @@ emigracion[,3:4] <- lapply(emigracion[,3:4],mil)
 
 
 #Lectura de poblacion por comunidad autonoma 
+library(reshape2)
+library(tidyverse)
+library(lubridate)
+library(gganimate)
+
 autonoma <-  read.csv('dat/Poblacion/2853sc.csv',sep = ";",skip = 5)
 
-  mil <- function(x){
-    x<-as.numeric(gsub("\\.","",x))
-  }
-  
+mil <- function(x){
+  x<-as.numeric(gsub("\\.","",x))
+}
+
 autonoma[,2:70] <- lapply(autonoma[,2:70],mil)
 
+#Filtramos datos
 p.total <- autonoma[,c(1:24)]
 p.total <- p.total[-c(1,20:24),]
-
-
-library(reshape2)
+#Pasamos a modo largo la tabla
 p.total <- melt(p.total,"X")
 p.total$variable <- gsub('X','',p.total$variable)
 names (p.total)
 names(p.total) = c('Provincia','year','poblacion')
-
-library(tidyverse)
-library(lubridate)
+p.total <- na.omit(p.total)
+#asignamos rangos para la grafica
 p.total %>%
   select(Provincia,poblacion,year) %>%
   group_by(year) %>%
   arrange(year,-poblacion) %>%
   mutate(rank = 1:n()) %>%
   filter(rank <= 19) ->
-ranked_by_year1  
-
+  ranked_by_year1  
+#Convertimos datos a integer
 ranked_by_year1$year<- as.integer(ranked_by_year1$year)
 ranked_by_year1$poblacion<- as.integer(ranked_by_year1$poblacion)
-
-ggplot(data = ranked_by_year1) +
-  aes(group = poblacion, fill = Provincia) +
+#creamos la grafica animada
+my_theme <- ggplot(data = ranked_by_year1) +
+  aes(group = Provincia, fill=Provincia) + 
   aes(xmin = 0 ,
-      xmax = poblacion / 1000000) +
-  aes(ymin = rank - .45,
-      ymax = rank + .45) +
-  scale_y_reverse() +
+      xmax = poblacion/2000) +
+  aes(ymin = rank - 0.45,
+      ymax = rank + 0.45) +
+  scale_y_reverse(
+    breaks = c(0),
+    labels = c(0)) +
   scale_x_continuous(
-    limits = c(-350, 1400),
-    breaks = c(0, 400, 800, 1200),
-    labels = c(0, 400, 800, 1200)) +
+    limits = c(-1500, 4500),
+    breaks = c(0),
+    labels = c(0)) +
   labs(fill = "") +
-  geom_rect(alpha = .7) +
-  labs(x = 'Population (millions)') +
+  geom_rect(alpha = 0.7) +
+  labs(title = "Tasa de crecimiento demográfico (España/Comunidades)",x = 'Población') +
   aes(label = Provincia, y = rank) +
   geom_text(col = "gray13",
             hjust = "right",
-            x = -50) +
-  labs(y = "") +
-  scale_fill_viridis_d(option = "magma",
+            x = -30) +
+  geom_text(aes(y = rank , label = as.character(poblacion)),
+            vjust = 0.4, 
+            hjust = 'right' ,
+            x = 4800) +
+  labs(y = "Provincia") +
+  theme(axis.text=element_text(size=20,face="bold"),
+        axis.title=element_text(size=14,face="bold")) +
+  scale_fill_viridis_d(option = "viridis",
                        direction = -1) +
-  geom_text(x = 1000 , y = -10,
+  geom_text(x = 3000 , y = -15,
             family = "Times",
             aes(label = as.character(year)),
-            size = 30, col = "grey18") +
-  my_theme ->
-  my_plot
-  
-library(gganimate)
-options(gganimte.nframes = 20)
-my_plot + gganimate::transition_time(year)
+            size = 15, col = "grey18") 
+my_plot <- my_theme
+#ponemos condiciones a la grafica y la pintamos 
+options(gganimate.dev_args = list(width = 800, height = 600))
+my_plot + gganimate::transition_states(year)
+
+
+
+
+
+
+
+
+
 
 
 
