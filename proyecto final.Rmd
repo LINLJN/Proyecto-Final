@@ -28,24 +28,11 @@ summary(cars)
 You can also embed plots, for example:
 
 ```{r p, echo=FALSE}
-#install.packages("gifski")
-autonoma <-  read.csv('dat/Poblacion/2853sc.csv',sep = ";",skip = 5)
 
-  mil <- function(x){
-    x<-as.numeric(gsub("\\.","",x))
-  }
-  
-autonoma[,2:70] <- lapply(autonoma[,2:70],mil)
-
-p.total <- autonoma[,c(1:24)]
-p.total <- p.total[-c(1,20:24),]
-library(reshape2)
-p.total <- melt(p.total,"X")
-p.total$variable <- gsub('X','',p.total$variable)
 
 ```
 
-```{r p.total, echo=FALSE}
+`{r p.total, echo=TRUE}
 library(tidyverse)
 library(gganimate)
 library(gapminder)
@@ -84,6 +71,76 @@ a <- ggplot(gap, aes(rank, group = X,
 
 animate(a, fps = 25, duration = 20, width = 800, height = 600)
 
+
+
+```{r bar race ,echo = FALSE}
+#install.packages("gifski")
+library(reshape2)
+library(tidyverse)
+library(lubridate)
+
+autonoma <-  read.csv('dat/Poblacion/2853sc.csv',sep = ";",skip = 5)
+
+  mil <- function(x){
+    x<-as.numeric(gsub("\\.","",x))
+  }
+  
+autonoma[,2:70] <- lapply(autonoma[,2:70],mil)
+
+p.total <- autonoma[,c(1:24)]
+p.total <- p.total[-c(1,20:24),]
+
+p.total <- melt(p.total,"X")
+p.total$variable <- gsub('X','',p.total$variable)
+names (p.total)
+names(p.total) = c('Provincia','year','poblacion')
+
+p.total %>%
+  select(Provincia,poblacion,year) %>%
+  group_by(year) %>%
+  arrange(year,-poblacion) %>%
+  mutate(rank = 1:n()) %>%
+  filter(rank <= 19) ->
+ranked_by_year1  
+
+ranked_by_year1$year<- as.integer(ranked_by_year1$year)
+ranked_by_year1$poblacion<- as.integer(ranked_by_year1$poblacion)
+
+my_theme <- ggplot(data = ranked_by_year1) +
+  aes(group = Provincia, fill=Provincia) +
+  aes(xmin = 0 ,
+      xmax = poblacion/2000) +
+  aes(ymin = rank - 0.45,
+      ymax = rank + 0.45) +
+  scale_y_reverse(
+    breaks = c(0),
+    labels = c(0)) +
+  scale_x_continuous(
+    limits = c(-1500, 4500),
+    breaks = c(0),
+    labels = c(0)) +
+  labs(fill = "") +
+  geom_rect(alpha = 0.7) +
+  labs(x = 'Población') +
+  aes(label = Provincia, y = rank) +
+  geom_text(col = "gray13",
+            hjust = "right",
+            x = -30) +
+  labs(y = "Provincia") +
+  labs(title = "Crecimiento de la poblacion por comunidad autonoma"）+
+  scale_fill_viridis_d(option = "viridis",
+                       direction = -1) +
+  geom_text(x = 3500 , y = -17,
+            family = "Times",
+            aes(label = as.character(year)),
+            size = 12, col = "grey18") 
+
+my_plot <- my_theme
+  
+library(gganimate)
+options(gganimte.nframes = 45)
+my_plot + gganimate::transition_time(year)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
