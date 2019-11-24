@@ -2,54 +2,66 @@
 title: "Población en España "
 author: "Lijun Lin"
 github: {user: LINLJN, repo: Proyecto-Final, branch: "master"}
-date: "20/11/2019"
+date: "20 de Noviembre de 2019"
 output: 
-  html_document:
-    toc: true
-    toc_depth: 5            
-    toc_float: 
-      collapsed: false        
-      smooth_scroll: true
-
-  # Encabezado 1
-  ##  Exprexiones regulares
-   ### ¿Que son las expresiones regulares?
-
-  
+    rmdformats::material:
+    self_contained: true
+    thumbnails: true
+    lightbox: true
+    gallery: false
+    highlight: tango
+    fig_caption: yes
+    #toc: yes
+    #toc_depth: 5
+    #toc_float:
+      #collapsed: no
+      #smooth_scroll: yes
+      #install.packages("rmdformats")
+      #library(rmdformats)
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE
 )
 ```
-# Encabezado 1
-## Exprexiones regulares
-### ¿Que son las expresiones regulares?
+# Exprexiones regulares
+## ¿Que son las expresiones regulares?
 
-Expresión regular, también conocida como regex, regexp o expresión racional, es una secuencia de caracteres que forma un patrón de búsqueda, principalmente utilizada para la búsqueda de patrones de cadenas de caracteres u operaciones de sustituciones.
+En cómputo teórico y teoría de lenguajes formales una expresión regular, o expresión racional, es una secuencia de caracteres que conforma un patrón de búsqueda. También son conocidas como regex o regexp, por su contracción de las palabras inglesas regular expression. Son principalmente utilizadas para la búsqueda de patrones de cadenas de caracteres u operaciones de sustituciones.
 
-Las expresiones regulares se construyen utilizando los operadores unión, concatenación y clausura de Kleene.
+En informática, las expresiones regulares proporcionan una manera muy flexible de buscar o reconocer cadenas de texto
 
-La clausura de Kleene : es una operación que se aplica sobre un conjunto de cadenas de caracteres o un conjunto de símbolos o caracteres, y representa el conjunto de las cadenas que se pueden formar tomando cualquier número de cadenas del conjunto inicial, posiblemente con repeticiones, y concatenándolas entre sí.
+## Recursos sobre expresiones regulares
+
+En la busqueda de las expresiones regulares, nos encontramos con la web [RPubs](http://rpubs.com/ydmarinb/429756), es una de las principales páginas webs de consulta del Rstudio, y sin duda una de las mejores y completas, ya que en ella podemos encontrar soluciones para nuestros problemas o manuales. Volviendo al tema, en la pagina citada anteriormete, podemos encontrar con la definición y la teoría del mismo, y lo más importante consta de un manual de todas las expresiones y sus finciones. También hay un apartado de *Implementación en R*, donde explica como se detecta un patron, localización de un patron y otras funciones.
+
+Otra de las paginas es de [Microsoft](https://docs.microsoft.com/es-es/dotnet/standard/base-types/regular-expression-language-quick-reference), esta página empieza con un índice en el encabezado y seguido de una breve definición como introducción, a diferencia de anterior [RPubs](http://rpubs.com/ydmarinb/429756), nos da la opción de descargar el contenido de la página en formato Word o en PDF, también como la página de RPubs tiene un manual, y en este caso se trata de un manual mucho más detallado y más técnico, consta también de una explicación de cada una de las categorias de expresiones, por ejemplo: *Un cuantificador especifica cuántas instancias del elemento anterior...*. Hay que mencionar que es mucho más extensa como ejemplos de expresiones regulares y explicaciones de otras muchas funciones.
+
+### Opinion personal
+
+En general tanto [RPubs](http://rpubs.com/ydmarinb/429756) como [Microsoft](https://docs.microsoft.com/es-es/dotnet/standard/base-types/regular-expression-language-quick-reference), las dos páginas son excepcionales, ya que la información es clara y ordenada. Pero desde un punto más crítico, recomendaría la de [Microsoft](https://docs.microsoft.com/es-es/dotnet/standard/base-types/regular-expression-language-quick-reference), ya que en comparación es mucho más completo, abarca desde Escapes de carácter hasta Construcciones misceláneas. En cambio la otra solo algúnas funciones básicas
+
+# Markdown
+## ¿Que es Markdown?
+
+Markdown es un lenguaje de marcado ligero creado por John Gruber que trata de conseguir la máxima legibilidad y facilidad de publicación tanto en su forma de entrada como de salida, inspirándose en muchas convenciones existentes para marcar mensajes de correo electrónico usando texto plano. Se distribuye bajo licencia BSD y se distribuye como plugin (o al menos está disponible) en diferentes sistemas de gestión de contenidos (CMS). Markdown convierte el texto marcado en documentos XHTML utilizando html2text creado por Aaron Swartz. Markdown fue implementado originariamente en Perl por Gruber, pero desde entonces ha sido traducido a multitud de lenguajes de programación, incluyendo PHP, Python, Ruby, Java y Common Lisp.
+
+## Recursos sobre Markdown
 
 
 
 
 
-## Markdown
+```{r cars, eval=FALSE, include=FALSE}
 
-
-
-```{r cars, echo=FALSE}
-summary(cars)
 ```
 
-## Including Plots
+# Including Plots
 
 You can also embed plots, for example:
 
 
-```{r poblacion grafica race, echo=F, message=FALSE, warning=FALSE, gganimate=list(nframes = 300, fps = 60)}
+```{r datos, echo = FALSE, results='hide' }
 #install.packages("gifski") es necesario instalar este paquete para ejecutar la animacion
 library(reshape2)
 library(tidyverse)
@@ -84,7 +96,9 @@ ranked_by_year1
 
 ranked_by_year1$year <- as.integer(ranked_by_year1$year)
 ranked_by_year1$poblacion <- as.integer(ranked_by_year1$poblacion)
+```
 
+```{r poblacion grafica race, echo=FALSE, message=FALSE, warning=FALSE, fps=120, nframes=500}
 my_theme <- ggplot(data = ranked_by_year1) +
   aes(group = Provincia, fill = Provincia) +
   aes(xmin = 0 ,
@@ -108,10 +122,10 @@ my_theme <- ggplot(data = ranked_by_year1) +
             vjust = 0.4, 
             hjust = "right" ,
             x = 4800) +
-  geom_text(x = 3000 , y = -15,
+  geom_text(x = 2500 , y = -15,
             family = "Times",
             aes(label = as.character(year)),
-            size = 15, col = "grey18") +
+            size = 10, col = "grey18") +
   labs(fill = "") +
   labs(title = "Tasa de crecimiento demográfico (España/Comunidades)") +
   labs(x = "Población",y = "Provincia") +
@@ -120,7 +134,7 @@ my_theme <- ggplot(data = ranked_by_year1) +
 
 my_plot <- my_theme
 
-options(gganimate.dev_args = list(width = 800, height = 800))
+options(gganimate.dev_args = list(width =200, height = 200))
 my_plot + gganimate::transition_states(year)
 
 ```
