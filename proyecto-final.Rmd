@@ -1,5 +1,5 @@
 ---
-title: "Población en España "
+title: " "
 author: "Lijun Lin"
 github: {user: LINLJN, repo: Proyecto-Final, branch: "master"}
 date: "20 de Noviembre de 2019"
@@ -37,7 +37,7 @@ En la busqueda de las expresiones regulares, nos encontramos con la web [RPubs](
 
 Otra de las paginas es de [Microsoft](https://docs.microsoft.com/es-es/dotnet/standard/base-types/regular-expression-language-quick-reference), esta página empieza con un índice en el encabezado y seguido de una breve definición como introducción, a diferencia de anterior [RPubs](http://rpubs.com/ydmarinb/429756), nos da la opción de descargar el contenido de la página en formato Word o en PDF, también como la página de RPubs tiene un manual, y en este caso se trata de un manual mucho más detallado y más técnico, consta también de una explicación de cada una de las categorias de expresiones, por ejemplo: *Un cuantificador especifica cuántas instancias del elemento anterior...*. Hay que mencionar que es mucho más extensa como ejemplos de expresiones regulares y explicaciones de otras muchas funciones.
 
-### Opinion personal
+## Opinion personal
 
 En general tanto [RPubs](http://rpubs.com/ydmarinb/429756) como [Microsoft](https://docs.microsoft.com/es-es/dotnet/standard/base-types/regular-expression-language-quick-reference), las dos páginas son excepcionales, ya que la información es clara y ordenada. Pero desde un punto más crítico, recomendaría la de [Microsoft](https://docs.microsoft.com/es-es/dotnet/standard/base-types/regular-expression-language-quick-reference), ya que en comparación es mucho más completo, abarca desde Escapes de carácter hasta Construcciones misceláneas. En cambio la otra solo algúnas funciones básicas
 
@@ -48,15 +48,21 @@ Markdown es un lenguaje de marcado ligero creado por John Gruber que trata de co
 
 ## Recursos sobre Markdown
 
+En esta ocasión hablaremos sobre dos páginas que contengan manuales para el el uso del Markdown y sus expresiones, en primer lugar hablaremos sobre la página [Joedicastro](https://joedicastro.com/pages/markdown.html), es una página de guía para recordar todas las posibilidades que el ofrece tanto de Markdown como Pygments, para editar y formatear texto. Se trata de una página muy sencilla, con sencilla quiero decir que para acceder a la información es basntante fácil, ya que no necesitamos navegar dentro de su web. A la hora de usar la guía resulta bastante intuitiva, ya que se han molestado en poner en el cabezado de la tabla *Tecleas -> Obtines*, siendo muy visual.
 
+La otra página que mencionaremos es [Markdown](https://markdown.es/sintaxis-markdown/), se trata de una página de tutoriales de Markdown, bastante similar a la página anteriormente nombrada, pero hay que destacar que en este caso tenemos videos explicativos [Markdown en 5 min](https://www.youtube.com/watch?time_continue=1&v=y6XdzBNC0_0&feature=emb_logo), pero en cambio la página tiene una desventaja, es que tiene bastantes anuncios entre guía y guía. En este caso también nos lo expliaca con ejemplos, facilitando nuestro aprendizaje.
 
+## Opinion personal
+
+Desde mi punto de vista, la página [Joedicastro](https://joedicastro.com/pages/markdown.html) ha resultado ganadora, por el motivo de que la informacion presentada es mucho más clara y sencilla de entender, tambien hay que destacar que el tamaño de la letra es más grande y es más fácil de leer. 
+Puntos negativos de la página [Markdown](https://markdown.es/sintaxis-markdown/), excesivos anuncios, letras muy pequeñas, poco intuitivo.
 
 
 ```{r cars, eval=FALSE, include=FALSE}
 
 ```
 
-# Including Plots
+# Evolución de la población Española 
 
 You can also embed plots, for example:
 
@@ -109,7 +115,7 @@ my_theme <- ggplot(data = ranked_by_year1) +
     breaks = c(0),
     labels = c(0)) +
   scale_x_continuous(
-    limits = c(-1500, 4500),
+    limits = c(-2200, 4500),
     breaks = c(0),
     labels = c(0)) +
   scale_fill_viridis_d(option = "viridis",direction = -1) +
@@ -131,11 +137,12 @@ my_theme <- ggplot(data = ranked_by_year1) +
   labs(x = "Población",y = "Provincia") +
   theme(axis.title = element_text(size = 10,face ="bold")) +
   theme(plot.title = element_text(size=13,face = "bold")) 
+  #theme(plot.margin = margin(2,.8,2,.8, "cm"))
 
 my_plot <- my_theme
 
 options(gganimate.dev_args = list(width =200, height = 200))
-my_plot + gganimate::transition_states(year)
+my_plot + gganimate::transition_states(year) 
 
 ```
 
