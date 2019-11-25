@@ -1,5 +1,5 @@
 ---
-title: " "
+title: "TF"
 author: "Lijun Lin"
 github: {user: LINLJN, repo: Proyecto-Final, branch: "master"}
 date: "20 de Noviembre de 2019"
@@ -64,7 +64,13 @@ Puntos negativos de la página [Markdown](https://markdown.es/sintaxis-markdown/
 
 # Evolución de la población Española 
 
-You can also embed plots, for example:
+
+
+
+
+
+
+
 
 
 ```{r datos, echo = FALSE, results='hide' }
@@ -137,8 +143,6 @@ my_theme <- ggplot(data = ranked_by_year1) +
   labs(x = "Población",y = "Provincia") +
   theme(axis.title = element_text(size = 10,face ="bold")) +
   theme(plot.title = element_text(size=13,face = "bold")) 
-  #theme(plot.margin = margin(2,.8,2,.8, "cm"))
-
 my_plot <- my_theme
 
 options(gganimate.dev_args = list(width =200, height = 200))
