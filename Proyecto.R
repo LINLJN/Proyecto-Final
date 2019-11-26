@@ -1,14 +1,7 @@
 
 #Lectura de datos PIB 'variacion anual del PIB de Espa?a y previsiones de crecimiento hechas por el FMI'
 PIB <- read.csv('dat/PIB/variacion_anual_del_pib_d.csv',sep = ";",header = T,encoding = 'UTF-8')
-PIB$Variaci?n.anual.del.PIB <- as.numeric(gsub(',','.',PIB$Variaci?n.anual.del.PIB))
-
-
-
-#Las previsiones sobre el PIB espa?ol de la OCDE
-
-pib <-  read.csv('dat/PIB/las_previsiones_sobre_el_PIB.csv',sep = ";",header = T,encoding = 'UTF-8')
-pib$Variaci?n.interanual.del.PIB <- as.numeric(gsub(',','.',pib$Variaci?n.interanual.del.PIB))
+PIB$Variación.anual.del.PIB <- as.numeric(gsub(',','.',PIB$Variación.anual.del.PIB))
 
 
 
@@ -115,18 +108,7 @@ my_plot <- my_theme
 options(gganimate.dev_args = list(width = 800, height = 600))
 my_plot + gganimate::transition_states(year)
 
-
-
-
-
-
-
-
-
-
-
-
-
+#------------------------------------------------
 p.hombres <-  autonoma[,c(25:47)]
 
 p.mujeres <-  autonoma[,c(48:70)]

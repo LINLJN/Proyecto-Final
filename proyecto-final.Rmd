@@ -57,28 +57,112 @@ La otra página que mencionaremos es [Markdown](https://markdown.es/sintaxis-mar
 Desde mi punto de vista, la página [Joedicastro](https://joedicastro.com/pages/markdown.html) ha resultado ganadora, por el motivo de que la informacion presentada es mucho más clara y sencilla de entender, tambien hay que destacar que el tamaño de la letra es más grande y es más fácil de leer. 
 Puntos negativos de la página [Markdown](https://markdown.es/sintaxis-markdown/), excesivos anuncios, letras muy pequeñas, poco intuitivo.
 
+# Evolución de la población Española 
 
-```{r cars, eval=FALSE, include=FALSE}
+Un total de 46.934.632 personas viven en España en el semestre 1 de 2019, lo que supone un aumento de 201.592 personas respecto al periodo anterior y una variación de 0,59% en comparación con el mismo periodo del año pasado, según las últimas cifras publicadas por el Instituto Nacional de Estadística (INE).  
+```{r library, echo=FALSE}
+#install.packages("kableExtra")
+require(kableExtra)
+require(knitr)
+require(rvest)
+require(dygraphs)
+require(xts)
+require(lubridate)
+require(reshape2)
+require(tidyverse)
+require(gganimate)
+```
+
+```{r table, echo=FALSE}
+
+
+pib <- read_html("https://www.ine.es/dyngs/INEbase/es/operacion.htm?c=Estadistica_C&cid=1254736176951&menu=ultiDatos&idp=1254735572981")
+pib <- html_nodes(pib,"table")
+pib <- html_table(pib[[1]],header=T, fill=T)
+pib <- pib[,-c(2)]
+
+
+  kable(pib,caption = "Población residente en España") %>%
+  kable_styling(bootstrap_options = c( "striped",full_width = T, position = "left")) %>%
+    footnote(general = "Fuente INEI. ",
+           number = c("Datos de 1 de enero de 2019 (Provisional)"))
+```
+
+Se publica una serie poblacional desde el año 1971 que se obtiene de las estimaciones intercensales de la población, para el período 1971-2012, y de la propia operación Cifras de población, a partir de 2012.
+
+Los datos así obtenidos se emplean como cifras poblacionales de referencia en todas las operaciones estadísticasque el INE realiza (encuestas, Contabilidad Nacional, indicadores, etc.) y se transmiten a nivel internacional como datos oficiales de la población de España a todos los efectos.
+
+```{r Comparación gráfica,echo=FALSE}
+
+autonoma <-  read.csv("dat/Poblacion/2853sc.csv",sep = ";",skip = 5)
+
+  mil <- function(x){
+    x<-as.numeric(gsub("\\.","",x))}
+  
+autonoma[,2:70] <- lapply(autonoma[,2:70],mil)
+
+p.total <- autonoma[,c(1:24)]
+p.total <- p.total[-c(2:24),]
+p.total <- melt(p.total,"X")
+p.total$variable <- gsub("X","",p.total$variable)
+names(p.total) = c("Provincia","year","poblacion")
+p.total <- na.omit(p.total)
+p.total$year <- as.Date(p.total$year,"%Y")
+p.total$poblacion <- p.total$poblacion/1000000
+
+poblacion_xts <- xts(p.total$poblacion,order.by=p.total$year)
+
+#-------------poblacion--------------
+
+PIB <- read.csv('dat/PIB/variacion_anual_del_pib_d.csv',sep = ";",header = T,encoding = 'UTF-8')
+names(PIB) = c("year","periodo","variacion_pib")
+PIB$variacion_pib <- as.numeric(gsub(',','.',PIB$variacion_pib))
+PIB <- PIB[-c(26:39),]
+PIB$year <- as.Date(PIB$year,"%Y")
+PIB$variacion_pib <- PIB$variacion_pib*10
+
+PIB_xts <- xts(PIB$variacion_pib,order.by=PIB$year)
+#---------------PIB--------------------
+
+dat <- cbind(poblacion_xts,PIB_xts)
+
+poblacion_grap <- dygraph(dat, ylab="total",
+        main = "Evolución población") %>%
+  dyRangeSelector(height = 20)
+
+poblacion_grap %>%
+    dySeries("poblacion_xts" , label = "Poblacion total") %>%
+    dySeries("PIB_xts", label = "PIB")
+#--------------grafica-------------------
+```
+
+###¿Existirá alguna relación entre el crecimiento de la población y el crecimiento económico?
+
+En la práctica podría parecer que sí.
+Muchos estudios indican que la relación entre el crecimiento demográfico y el PIB de una región es incierta. El PIB o producto interno bruto es un indicador importante del desempeño económico de un país.
+Esta medida representa el valor final de los bienes y servicios producidos dentro de los límites geográficos de un país durante un período de tiempo determinado. Por otra parte, la expresión crecimiento demográfico hace referencia al cambio poblacional de una determinada región.
+El tamaño y la densidad de la población se relacionaron positivamente con el crecimiento del PIB.
+
+```{r eval=FALSE, include=FALSE}
+
+p.poblacion <- read.csv('dat/Poblacion/prevision_poblacion.csv',sep = ";",header = T,encoding = 'UTF-8')
+
+  sub <- function(x){
+    x<-as.numeric(gsub(",",".",x))}
+  
+p.poblacion[,3:5] <- lapply(p.poblacion[,3:5],sub)
+names(p.poblacion) = c("year","periodo","Hombre","Mujer","Poblacion.total")
+str(p.poblacion)
+#-------------datos--------------------
+
+
+
 
 ```
 
-# Evolución de la población Española 
-
-
-
-
-
-
-
-
-
-
+## Gráfica de crecimiento de la población
 ```{r datos, echo = FALSE, results='hide' }
 #install.packages("gifski") es necesario instalar este paquete para ejecutar la animacion
-library(reshape2)
-library(tidyverse)
-library(lubridate)
-library(gganimate)
 
 autonoma <-  read.csv("dat/Poblacion/2853sc.csv",sep = ";",skip = 5)
 
@@ -90,11 +174,8 @@ autonoma[,2:70] <- lapply(autonoma[,2:70],mil)
 
 p.total <- autonoma[,c(1:24)]
 p.total <- p.total[-c(1,20:24),]
-
-
 p.total <- melt(p.total,"X")
 p.total$variable <- gsub("X","",p.total$variable)
-names (p.total)
 names(p.total) = c("Provincia","year","poblacion")
 p.total <- na.omit(p.total)
 
@@ -110,7 +191,7 @@ ranked_by_year1$year <- as.integer(ranked_by_year1$year)
 ranked_by_year1$poblacion <- as.integer(ranked_by_year1$poblacion)
 ```
 
-```{r poblacion grafica race, echo=FALSE, message=FALSE, warning=FALSE, fps=120, nframes=500}
+```{r poblacion grafica race, echo=FALSE, message=FALSE, warning=FALSE, fps=60, nframes=300}
 my_theme <- ggplot(data = ranked_by_year1) +
   aes(group = Provincia, fill = Provincia) +
   aes(xmin = 0 ,
@@ -139,7 +220,7 @@ my_theme <- ggplot(data = ranked_by_year1) +
             aes(label = as.character(year)),
             size = 10, col = "grey18") +
   labs(fill = "") +
-  labs(title = "Tasa de crecimiento demográfico (España/Comunidades)") +
+  labs(title = "Crecimiento demográfico (España/Comunidades)") +
   labs(x = "Población",y = "Provincia") +
   theme(axis.title = element_text(size = 10,face ="bold")) +
   theme(plot.title = element_text(size=13,face = "bold")) 
@@ -147,8 +228,8 @@ my_plot <- my_theme
 
 options(gganimate.dev_args = list(width =200, height = 200))
 my_plot + gganimate::transition_states(year) 
-
 ```
+Los datos estan resumidas por comunidades autónomas, como verás no existen datos del año 1997, ya que en ese año no se revisó el padrón para ese año.
 
 
 
