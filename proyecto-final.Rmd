@@ -138,23 +138,6 @@ Muchos estudios indican que la relación entre el crecimiento demográfico y el 
 Esta medida representa el valor final de los bienes y servicios producidos dentro de los límites geográficos de un país durante un período de tiempo determinado. Por otra parte, la expresión crecimiento demográfico hace referencia al cambio poblacional de una determinada región.
 El tamaño y la densidad de la población se relacionaron positivamente con el crecimiento del PIB.
 
-```{r eval=FALSE, include=FALSE}
-
-p.poblacion <- read.csv('dat/Poblacion/prevision_poblacion.csv',sep = ";",header = T,encoding = 'UTF-8')
-
-  sub <- function(x){
-    x<-as.numeric(gsub(",",".",x))}
-  
-p.poblacion[,3:5] <- lapply(p.poblacion[,3:5],sub)
-names(p.poblacion) = c("year","periodo","Hombre","Mujer","Poblacion.total")
-str(p.poblacion)
-#-------------datos--------------------
-
-
-
-
-```
-
 ## Gráfica de crecimiento de la población
 ```{r datos, echo = FALSE, results='hide' }
 #install.packages("gifski") es necesario instalar este paquete para ejecutar la animacion
