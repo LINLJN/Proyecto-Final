@@ -1,8 +1,8 @@
 ---
-title: "TF"
-author: "Lijun Lin"
+title: "LIJUN LIN"
+author: "20 de Nov de 2019"
 github: {user: LINLJN, repo: Proyecto-Final, branch: "master"}
-date: "20 de Noviembre de 2019"
+date: "https://github.com/LINLJN/Proyecto-Final.git"
 output: 
     rmdformats::material:
     self_contained: true
@@ -136,7 +136,7 @@ poblacion_grap %>%
 #--------------grafica-------------------
 ```
 
-###¿Existirá alguna relación entre el crecimiento de la población y el crecimiento económico?
+### ¿Existirá alguna relación entre el crecimiento de la población y el crecimiento económico?
 
 En la práctica podría parecer que sí.
 Muchos estudios indican que la relación entre el crecimiento demográfico y el PIB de una región es incierta. El PIB o producto interno bruto es un indicador importante del desempeño económico de un país.
