@@ -11,13 +11,8 @@ output:
     gallery: false
     highlight: tango
     fig_caption: yes
-    #toc: yes
-    #toc_depth: 5
-    #toc_float:
-      #collapsed: no
-      #smooth_scroll: yes
-      #install.packages("rmdformats")
-      #library(rmdformats)
+       
+      
 ---
 
 ```{r setup, include=FALSE}
