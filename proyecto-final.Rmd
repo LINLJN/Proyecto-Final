@@ -1,6 +1,6 @@
 ---
 title: "LIJUN LIN"
-author: "20 de Nov de 2019"
+author: "27 de Noviembre de 2019"
 github: {user: LINLJN, repo: Proyecto-Final, branch: "master"}
 date: "https://github.com/LINLJN/Proyecto-Final.git"
 output: 
